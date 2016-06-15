@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mybatis.example.UsersMapper">
+
+	<resultMap id="usersMap" type="com.joshuait.entity.Users">
+		<result column="user_login" property="userLogin" />
+		<result column="user_pass" property="userPass" />
+		<result column="user_nicename" property="userNicename" />
+		<result column="user_email" property="userEmail" />
+		<result column="user_registered" property="userRegistered" />
+		<result column="user_activation_key" property="userActivationKey" />
+		<result column="user_status" property="userStatus" />
+		<result column="display_name" property="displayName" />
+	</resultMap>
+
+	<select id="getByid" parameterType="int" resultMap="usersMap">
+		select * from
+		wp_users where id =#{id}
+	</select>
+
+	<delete id="delete">
+		DELETE FROM wp_users WHERE id =#{id}
+	</delete>
+
+	<update id="update" parameterType="com.joshuait.entity.Users">
+		update wp_users
+		<set>
+			<if test="userLogin != null">user_login=#{userLogin},</if>
+			<if test="userPass != null">user_pass=#{userPass},</if>
+			<if test="userNicename != null">user_nicename = #{userNicename},</if>
+			<if test="userEmail != null">user_email = #{userEmail},</if>
+			<if test="userRegistered != null">user_registered = #{userRegistered},</if>
+			<if test="userActivationKey != null">user_activation_key = #{userActivationKey},</if>
+			<if test="userStatus != null">user_status = #{userStatus},</if>
+			<if test="displayName != null">display_name = #{displayName}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<insert id="insert" parameterType="com.joshuait.entity.Users"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into wp_users
+		(user_login,user_pass,user_nicename,user_email,user_registered,user_activation_key,user_status,display_name)
+		values
+		(#{userLogin},#{userPass},#{userNicename},#{userEmail},#{userRegistered},#{userActivationKey},#{userStatus},#{displayName})
+	</insert>
+
+	<select id="search" parameterType="com.joshuait.entity.Users"
+		resultMap="usersMap">
+		select * from wp_users
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="userLogin != null">
+				user_login = #{userLogin}
+			</if>
+			<if test="userPass != null">
+				user_pass = #{userPass}
+			</if>
+			<if test="userNicename != null">
+				user_nicename = #{userNicename}
+			</if>
+			<if test="userEmail != null">
+				user_email = #{userEmail}
+			</if>
+			<if test="userRegistered != null">
+				user_registered = #{userRegistered}
+			</if>
+			<if test="userActivationKey != null">
+				user_activation_key = #{userActivationKey}
+			</if>
+			<if test="userStatus != null">
+				user_status = #{userStatus}
+			</if>
+			<if test="displayName != null">
+				display_name = #{displayName}
+			</if>
+		</where>
+	</select>
+
+</mapper>
