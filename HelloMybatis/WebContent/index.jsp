@@ -16,21 +16,33 @@
 	<div style="color: blue">
 		<%
 			String msg = (String) request.getAttribute("msg");
+
+			String userLogin = request.getParameter("userLogin");
+
+			UsersDao userDao = new UsersDao();
+			Users user = new Users();
+			if (userLogin != null && !"".equals(userLogin.trim())) {
+				user.setUserLogin(userLogin);
+			}
+			List<Users> usersList = userDao.Search(user);
 		%>
 		<%=msg%>
+	</div>
+	<div>
+		<form action="index.jsp">
+			登录名称：<input type="text" name="userLogin" value="<%=userLogin%>">
+			<input type="submit" value="查询">
+		</form>
 	</div>
 	<table>
 		<tr>
 			<td>#</td>
 			<td>登录名称</td>
-			<td>昵称</td>
 			<td>邮箱</td>
 			<td>其他</td>
+			<td>操作</td>
 		</tr>
 		<%
-			UsersDao userDao = new UsersDao();
-			List<Users> usersList = userDao.Search(new Users());
-			System.out.println();
 			for (Users u : usersList) {
 		%>
 		<tr>
@@ -38,6 +50,10 @@
 			<td><%=u.getUserLogin()%></td>
 			<td><%=u.getUserEmail()%></td>
 			<td><%=u.getUserStatus()%></td>
+			<td>
+				<a href="UserServlet?action=delete&id=<%=u.getId()%>">删除</a>
+				<a href="user-edit.jsp?id=<%=u.getId()%>">编辑</a>
+			</td>
 		</tr>
 		<%
 			}
