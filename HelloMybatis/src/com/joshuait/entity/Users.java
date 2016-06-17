@@ -14,7 +14,6 @@ public class Users implements Serializable{
 	private Integer userStatus;
 	private String displayName;
 
-
 	public Integer getId() {
 		return id;
 	}
