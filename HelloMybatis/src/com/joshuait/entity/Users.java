@@ -1,7 +1,7 @@
 package com.joshuait.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 public class Users implements Serializable{
 	private Integer id;

@@ -17,7 +17,7 @@ public class UsersDao {
 	public static InputStream inputStream = null;
 	public static SqlSessionFactory sqlSessionFactory = null;
 
-	public static void init() {
+	public UsersDao() {
 		try {
 			inputStream = Resources.getResourceAsStream(resource);
 			sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
@@ -26,29 +26,7 @@ public class UsersDao {
 		}
 	}
 	
-	public static void main(String[] args) throws IOException {
-		init();
-		Users user = new Users();
-		/*System.out.println(getById(1));*/
-		
-		/*user.setUserLogin("admin");
-		System.out.println(Search(user));*/
-		
-		/*user.setUserLogin("abc");
-		user.setUserPass("123");
-		insert(user);*/
-		
-		/*delete(16);*/
-		
-		/*user.setUserLogin("abc11");
-		user.setUserPass("123wqww");
-		user.setId(15);
-		update(user);*/
-		
-		Search(user);
-	}
-	
-	public static Users getById(int id) {
+	public Users getById(int id) {
 		SqlSession session = sqlSessionFactory.openSession();
 		Users user = null;
 		try {
@@ -59,7 +37,7 @@ public class UsersDao {
 		return user;
 	}
 	
-	public static List<Users> Search(Users user) {
+	public List<Users> Search(Users user) {
 		SqlSession session = sqlSessionFactory.openSession();
 		List<Users> list = null;
 		try {
@@ -70,10 +48,7 @@ public class UsersDao {
 		return list;
 	}
 	
-	
-	
-
-	public static void insert(Users user) {
+	public void insert(Users user) {
 
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
@@ -86,7 +61,7 @@ public class UsersDao {
 		}
 	}
 
-	public static void update(Users user) {
+	public void update(Users user) {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 			session.update("org.mybatis.example.UsersMapper.update",user);
@@ -97,7 +72,7 @@ public class UsersDao {
 
 	}
 	
-	public static void delete(int id) {
+	public void delete(int id) {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 			session.update("org.mybatis.example.UsersMapper.delete",id);
