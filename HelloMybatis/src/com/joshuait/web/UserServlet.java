@@ -2,6 +2,7 @@ package com.joshuait.web;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,12 +38,63 @@ public class UserServlet extends HttpServlet {
 		String action = request.getParameter("action");
 		if ("adduser".equals(action)) {
 			addUser(request, response);
-		}else if ("delete".equals(action)) {
+		} else if ("delete".equals(action)) {
 			deleteUser(request, response);
-		}if ("update".equals(action)) {
+		} else if ("update".equals(action)) {
 			updateUser(request, response);
+		} else if ("search".equals(action)) {
+			search(request, response);
+		} else if ("toAddPage".equals(action)) {
+			toAddPage(request, response);
+		} else if ("toEditPage".equals(action)) {
+			toEditPage(request, response);
+		} else {
+			toListPage(request, response);
 		}
-	
+
+	}
+
+	private void toEditPage(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String id = request.getParameter("id");
+		UsersDao userDao = new UsersDao();
+		Users user = userDao.getById(Integer.parseInt(id));
+		RequestDispatcher rd = request.getRequestDispatcher("user-edit.jsp");
+		request.setAttribute("user", user);
+		rd.forward(request, response);
+
+	}
+
+	private void toAddPage(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		RequestDispatcher rd = request.getRequestDispatcher("add-user.jsp");
+		rd.forward(request, response);
+	}
+
+	private void search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String userLogin = request.getParameter("userLogin");
+
+		UsersDao userDao = new UsersDao();
+		Users user = new Users();
+		if (userLogin != null && !"".equals(userLogin.trim())) {
+			user.setUserLogin(userLogin);
+		}
+		List<Users> usersList = userDao.Search(user);
+
+		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+		request.setAttribute("userList", usersList);
+		request.setAttribute("userLogin", userLogin);
+		rd.forward(request, response);
+	}
+
+	private void toListPage(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		UsersDao userDao = new UsersDao();
+		Users user = new Users();
+		List<Users> usersList = userDao.Search(user);
+		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+		request.setAttribute("userList", usersList);
+		rd.forward(request, response);
 	}
 
 	private void addUser(HttpServletRequest request, HttpServletResponse response)
@@ -67,11 +119,9 @@ public class UserServlet extends HttpServlet {
 		userDao.insert(user);
 		// Ctrl + Shift + o 快速导包
 		// 转发到index.jsp页面
-		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-		request.setAttribute("msg", "用户注册成功");
-		rd.forward(request, response);
+		request.setAttribute("msg", "新增用户成功");
+		toListPage(request, response);
 
-		System.out.println(userLogin + "-" + userPass + "-" + userPassConfirm + "-" + userEmail);
 	}
 
 	private void deleteUser(HttpServletRequest request, HttpServletResponse response)
@@ -81,18 +131,15 @@ public class UserServlet extends HttpServlet {
 
 		// 保存数据到数据库
 		UsersDao userDao = new UsersDao();
-		
+
 		// 删除数据
 		userDao.delete(Integer.parseInt(id));
 		// Ctrl + Shift + o 快速导包
 		// 转发到index.jsp页面
-		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-		request.setAttribute("msg", "用户注册成功");
-		rd.forward(request, response);
-
-		System.out.println(id);
+		request.setAttribute("msg", "成功");
+		toListPage(request, response);
 	}
-	
+
 	private void updateUser(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 读取页面传递过来的数据
@@ -113,13 +160,10 @@ public class UserServlet extends HttpServlet {
 		userDao.update(user);
 		// Ctrl + Shift + o 快速导包
 		// 转发到index.jsp页面
-		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-		request.setAttribute("msg", "用户注册成功");
-		rd.forward(request, response);
-
-		System.out.println(userLogin + "-" + userPass + "-" + userPassConfirm + "-" + userEmail);
+		request.setAttribute("msg", "成功");
+		toListPage(request, response);
 	}
-	
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)

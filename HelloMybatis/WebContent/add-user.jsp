@@ -11,7 +11,7 @@
 </head>
 <body>
 	<form action="UserServlet" method="POST">
-	<input type="text" name="action" value="adduser">
+	<input type="hidden" name="action" value="adduser">
 		登录名称。<input type = "text" name="userLogin">
 		密码。 <input type = "password" name = "userPass">
 		确认密码。 <input type = "password" name = "userPassConfirm">

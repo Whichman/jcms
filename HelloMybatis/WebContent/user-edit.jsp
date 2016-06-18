@@ -11,9 +11,7 @@
 </head>
 <body>
 	<%
-		String id = request.getParameter("id");
-		UsersDao userDao = new UsersDao();
-		Users user = userDao.getById(Integer.parseInt(id));
+		Users user = (Users)request.getAttribute("user");
 	%>
 
 	<form action="UserServlet" method="POST">
